@@ -1,4 +1,6 @@
 #Ignore the data folder
+*.jpeg
+*.csv
 ./data/*
 
 # Byte-compiled / optimized / DLL files
