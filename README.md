@@ -49,3 +49,30 @@ Once you have entered in your password, you can log in by going to e.g. Google C
 
 Note, if you want to install more packages, you can in jupyter lab e.g. write `!python -m pip install numpy`
 
+# Running stuff on GPU
+
+Once you have JupyterLab open, open a new terminal here by pressing File -> New -> Terminal and enter one of the three commands:
+* `voltash`
+* `sxm2sh`
+* `a100sh`
+
+This will launch an interactive session on a GPU, where you can execute e.g. the `train.py` script (after activating your virtual environment). 
+
+# Folder setup
+
+```
+.
+├── data
+│   ├── dermx_labels.csv
+│   ├── diseases_characteristics.csv
+│   └── images
+│       ├── 000498HB.jpeg
+⋮        ⋮
+│       └── wart9--WatermarkedWyJXYXRlcm1hcmtlZCJd.jpeg
+├── Data Exploration.ipynb
+├── LICENSE
+├── README.md
+├── train.py
+└── venv
+```
+
