@@ -53,7 +53,7 @@ class DiagnosisDataset(Dataset):
         image = TF.to_tensor(image)
         
         #Crop to center afterwards.
-        image = TF.center_crop(image, output_size = min(image.shape[1:]))
+        #image = TF.center_crop(image, output_size = min(image.shape[1:]))
         
         if self.size is not None:
             image = TF.resize(image, size = self.size)
