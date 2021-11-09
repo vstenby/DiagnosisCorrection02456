@@ -12,8 +12,8 @@ class CharacteristicsDataset(Dataset):
         self.patch = target['patch'].tolist()
         self.papule = target['papule'].tolist()
         self.dermatoglyph_disruption = target['dermatoglyph_disruption'].tolist()
-        self.open_comedo = target['open_comedo'].tolist()
-        self.area = target['area'].tolist()
+        #self.open_comedo = target['open_comedo'].tolist()
+        #self.area = target['area'].tolist()
         self.transform = transform
         self.size = size
         
@@ -33,18 +33,17 @@ class CharacteristicsDataset(Dataset):
         patch = self.patch[idx]
         papule = self.papule[idx]
         dermatoglyph_disruption = self.dermatoglyph_disruption[idx]
-        open_comedo = self.open_comedo[idx]
-        area = self.area[idx]
+        #open_comedo = self.open_comedo[idx]
+        #area = self.area[idx]
+        target = np.array([scale, plaque, pustule, patch, papule, dermatoglyph_disruption], dtype=float) #open_comedo, area
         
+        # Transform
         if self.transform is not None:
             image = self.transform(image=image)['image']
-            
+        
+        # Cast to Tensor and Resize
         image = TF.to_tensor(image)
-        
-        #Crop to center afterwards.
-        #image = TF.center_crop(image, output_size = min(image.shape[1:]))
-        
         if self.size is not None:
             image = TF.resize(image, size = self.size)
         
-        return image, [scale, plaque, pustule, patch, papule, dermatoglyph_disruption, open_comedo, area]
+        return image, target
