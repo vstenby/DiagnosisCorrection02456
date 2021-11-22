@@ -2,18 +2,13 @@ from torch.utils.data import Dataset, DataLoader
 import cv2
 import torchvision.transforms.functional as TF
 import numpy as np
+import torch
 
 class CharacteristicsDataset(Dataset):
     def __init__(self, path, target, size = None, transform = None):
         self.path   = path
-        self.scale = target['scale'].tolist()
-        self.plaque = target['plaque'].tolist()
-        self.pustule = target['pustule'].tolist()
-        self.patch = target['patch'].tolist()
-        self.papule = target['papule'].tolist()
-        self.dermatoglyph_disruption = target['dermatoglyph_disruption'].tolist()
-        #self.open_comedo = target['open_comedo'].tolist()
-        #self.area = target['area'].tolist()
+        self.target = torch.from_numpy(target.values)
+        self.variables = target.columns.tolist()
         self.transform = transform
         self.size = size
         
@@ -27,15 +22,7 @@ class CharacteristicsDataset(Dataset):
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         
         #Fetch the targets
-        scale = self.scale[idx]
-        plaque = self.plaque[idx]
-        pustule = self.pustule[idx]
-        patch = self.patch[idx]
-        papule = self.papule[idx]
-        dermatoglyph_disruption = self.dermatoglyph_disruption[idx]
-        #open_comedo = self.open_comedo[idx]
-        #area = self.area[idx]
-        target = np.array([scale, plaque, pustule, patch, papule, dermatoglyph_disruption], dtype=float) #open_comedo, area
+        target = self.target[idx,:]
         
         # Transform
         if self.transform is not None:
@@ -46,4 +33,4 @@ class CharacteristicsDataset(Dataset):
         if self.size is not None:
             image = TF.resize(image, size = self.size)
         
-        return image, target
+        return image, target, self.variables
