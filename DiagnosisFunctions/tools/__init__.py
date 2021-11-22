@@ -4,3 +4,6 @@ from .imread import imread
 from .imshow import imshow
 from .DiagnosisDataset import DiagnosisDataset
 from .CharacteristicsDataset import CharacteristicsDataset
+from .metrics import compute_metrics_scores
+from .classifications import classify_probability_predictions
+from .variables import getVariableGroups
