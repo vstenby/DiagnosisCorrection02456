@@ -5,7 +5,7 @@ import torch.nn as nn
 import torchvision.models as models
 
 class CNN1(nn.Module):
-    def __init__(self, n_characteristics = 7, n_diagnosis = 6, n_area = 4):
+    def __init__(self, n_diagnosis = 6):
         super().__init__()
     
         #We can still fine tune it.
