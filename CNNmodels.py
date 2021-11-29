@@ -19,7 +19,7 @@ class CNN1(nn.Module):
     def forward(self, x):
         #Pass the image through resnet. It's still being trained.
         x = self.base_model(x) 
-        x = torch.nn.ReLU(x)
+        x = torch.nn.ReLU()(x)
 
         #Diagnosis pipeline
         x_diagnosis = self.fc_diagnosis(x)
@@ -44,7 +44,7 @@ class CNN2(nn.Module):
     def forward(self, x):
         #Pass the image through resnet. It's still being trained.
         x = self.base_model(x) 
-        x = torch.nn.ReLU(x)
+        x = torch.nn.ReLU()(x)
 
         #Characteristics pipeline
         x_characteristics = self.fc_characteristics(x)
@@ -58,6 +58,7 @@ class CNN2(nn.Module):
         x_area = self.fc_area(x)
         x_area = torch.softmax(x_area, dim=-1)
 
+        #Concatenate the networks together again.
         x_cat  = torch.cat((x_characteristics, x_diagnosis, x_area), dim=1)
                 
         return x_cat
