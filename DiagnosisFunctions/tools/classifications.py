@@ -36,3 +36,8 @@ def classify_probability_predictions(pred):
 
     # Return classified predictions
     return pred
+
+
+def classify_diagnosis_predictions(pred):
+    # Predict only diagnosis
+    return classify_single_label(pred, diagnosis_variables)
