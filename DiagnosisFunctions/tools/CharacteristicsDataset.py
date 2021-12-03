@@ -21,16 +21,18 @@ class CharacteristicsDataset(Dataset):
         image = cv2.imread(path)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         
-        #Fetch the targets
+        #Fetch the target
         target = self.target[idx,:]
+        
+        # Resize
+        if self.size is not None:
+            image = cv2.resize(image, dsize=self.size, interpolation=cv2.INTER_CUBIC)
         
         # Transform
         if self.transform is not None:
             image = self.transform(image=image)['image']
         
-        # Cast to Tensor and Resize
+        # Cast to Tensor
         image = TF.to_tensor(image)
-        if self.size is not None:
-            image = TF.resize(image, size = self.size)
         
         return image, target, self.variables
