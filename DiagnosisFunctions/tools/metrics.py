@@ -4,7 +4,7 @@ diagnosis_variables, area_variables, characteristics_variables = getVariableGrou
 type_default = f1_score
 average_default = 'macro'
 
-def compute_matrix_metrics(pred, target, average, type, single_scores):
+def compute_matrix_metrics(target, pred, average, type, single_scores):
     # Check size
     assert len(pred) == len(target)
     # Calculate total score
@@ -15,12 +15,12 @@ def compute_matrix_metrics(pred, target, average, type, single_scores):
         all_scores['total'] = total_score
         all_scores['singles'] = {}
         for col in pred.columns:
-            all_scores['singles'][col] = compute_metrics(pred[col], target[col], average, type)
+            all_scores['singles'][col] = compute_metrics(target[col], pred[col], average=None, type=type)[1]
         return all_scores
     else:
         return total_score
     
-def compute_metrics(pred, target, average, type):
+def compute_metrics(target, pred, average, type):
     # Check size
     assert len(pred) == len(target)
     # Calculate score. NB: Check for dimension and average type
@@ -28,30 +28,42 @@ def compute_metrics(pred, target, average, type):
         average = average_default
     return type(y_true=target, y_pred=pred, average=average, zero_division=0)
 
-def compute_metrics_scores(pred, target, average=average_default, type=type_default, single_char_scores=False, single_area_scores=False):
+def compute_metrics_scores(target, pred, average=average_default, type=type_default, single_char_scores=False, single_area_scores=False):
     assert pred.shape == target.shape
 
     # Compute characteristics metric score
-    characteristics_scores = {'characteristics': compute_matrix_metrics(
-        pred[characteristics_variables],
+    characteristics_scores = compute_matrix_metrics(
         target[characteristics_variables],
+        pred[characteristics_variables],
         average,
         type,
-        single_char_scores)}
+        single_char_scores)
 
     # Compute diagnosis metric score
-    diagnosis_scores = { 'diagnosis': compute_metrics(
-        pred[diagnosis_variables],
+    diagnosis_scores = compute_metrics(
         target[diagnosis_variables],
+        pred[diagnosis_variables],
         average,
-        type)}
+        type)
 
     # Compute area accuracy metric score
-    area_scores = {'area': compute_matrix_metrics(
-        pred[area_variables],
+    area_scores = compute_matrix_metrics(
         target[area_variables],
+        pred[area_variables],
         average,
         type,
-        single_area_scores)}
+        single_area_scores)
     
-    return characteristics_scores, diagnosis_scores, area_scores
+    return { 'characteristics': characteristics_scores, 'diagnosis': diagnosis_scores, 'area': area_scores }
+
+def compute_diagnosis_scores(target, pred, average=average_default, type=type_default):
+    assert pred.shape == target.shape
+
+    # Compute diagnosis metric score
+    diagnosis_scores = compute_metrics(
+        target[diagnosis_variables],
+        pred[diagnosis_variables],
+        average,
+        type)
+    
+    return diagnosis_scores
