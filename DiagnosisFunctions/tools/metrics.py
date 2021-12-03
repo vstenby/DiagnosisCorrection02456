@@ -1,4 +1,4 @@
-from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score
+from sklearn.metrics import precision_score, recall_score, f1_score
 from .variables import getVariableGroups
 diagnosis_variables, area_variables, characteristics_variables = getVariableGroups()
 type_default = f1_score
