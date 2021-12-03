@@ -57,8 +57,7 @@ def compute_metrics_scores(target, pred, average=average_default, type=type_defa
     return { 'characteristics': characteristics_scores, 'diagnosis': diagnosis_scores, 'area': area_scores }
 
 def compute_diagnosis_scores(target, pred, average=average_default, type=type_default):
-    assert pred.shape == target.shape
-
+    
     # Compute diagnosis metric score
     diagnosis_scores = compute_metrics(
         target[diagnosis_variables],
