@@ -39,23 +39,27 @@ class DiagnosisDataset(Dataset):
         return len(self.path)
     
     def __getitem__(self, idx):
-        #Fetch the path and image
+        
+        # Fetch the path and image
         path  = self.path[idx]
         image = cv2.imread(path)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         
-        #Fetch the target
+        # Fetch the target
         target = self.target[idx]
         
+        # Resize
+        if self.size is not None:
+            image = cv2.resize(image, dsize=self.size, interpolation=cv2.INTER_CUBIC)
+        
+        # Transform
         if self.transform is not None:
             image = self.transform(image=image)['image']
-            
+        
+        # Cast to Tensor
         image = TF.to_tensor(image)
         
-        #Crop to center afterwards.
+        # Crop to center afterwards.
         #image = TF.center_crop(image, output_size = min(image.shape[1:]))
-        
-        if self.size is not None:
-            image = TF.resize(image, size = self.size)
         
         return image, target
